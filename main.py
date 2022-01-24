@@ -1,8 +1,10 @@
 import os
+import time
 
 import discord
 from dotenv import load_dotenv
-
+from playsound import playsound
+import random
 load_dotenv()
 
 client = discord.Client()
@@ -14,8 +16,12 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member, before, after):
     print(member)
-    if after.channel != None:
-        print(after.channel.id)
+    if after.channel != None and member!=client.user:
+        time.sleep(1)
+        await after.channel.connect()
+        time.sleep(2)
+
+
     print("###############")
 
 
