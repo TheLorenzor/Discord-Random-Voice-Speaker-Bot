@@ -34,14 +34,26 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member, before, after):
     print(member)
-    if after.channel != None and member != client.user:
-        time.sleep(1)
-        voiceClient = await after.channel.connect()
-        time.sleep(2)
-        audio = audio_dir.get(random.randint(0, 9))
-        print(audio)
-        voiceClient.play(discord.FFmpegPCMAudio(dir_path + fr'\\audio\\{audio}.mp3'))
 
+    if member != client.user:
+        if after.channel is not None and before.channel is None and len(after.channel.members) == 1:  # if the user is not the bot and someone connects to the channel it plays a sound
+            time.sleep(1)
+            voiceclient = await after.channel.connect()  # wait x amount of seconds so it randomize joins
+            speakrandom(voiceclient)
+
+        if after.channel is not None:
+            print(after.channel)
+
+        if before.channel is not None:
+            if len(before.channel.members) == 1:
+                print(client.voice_clients)
+
+
+def speakrandom(voiceclient):
+    time.sleep(2)  # wait 2 seconds so everybody is confest
+    audio = audio_dir.get(random.randint(0, 9))  # get one of the audios (spezified in the audio dictionary)
+    print(audio)
+    voiceclient.play(discord.FFmpegPCMAudio(dir_path + fr'\\audio\\{audio}.mp3'))  # play sound
 
 
 client.run(os.getenv("DISCORD_TOKEN"))
