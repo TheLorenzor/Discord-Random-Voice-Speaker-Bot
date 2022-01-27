@@ -28,12 +28,10 @@ audio_dir = {
 @client.event
 async def on_ready():
     print(f'{client.user} has connected')
-    print(client.guilds)
 
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    print(member)
 
     if member != client.user:
         if after.channel is not None and before.channel is None and len(after.channel.members) == 1:  # if the user is not the bot and someone connects to the channel it plays a sound
@@ -46,7 +44,12 @@ async def on_voice_state_update(member, before, after):
 
         if before.channel is not None:
             if len(before.channel.members) == 1:
-                print(client.voice_clients)
+                for voice_state in client.voice_clients:
+                    if voice_state.channel.id == before.channel.id:
+                        await voice_state.disconnect()
+                        print(voice_state.guild.id)
+                        break
+
 
 
 def speakrandom(voiceclient):
