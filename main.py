@@ -7,7 +7,6 @@ import random
 
 load_dotenv()
 
-random.seed(12749012743)
 client = discord.Client()
 dir_path = os.getcwd()
 
@@ -34,15 +33,19 @@ async def on_ready():
 async def on_voice_state_update(member, before, after):
 
     if member != client.user:
-        if after.channel is not None and before.channel is None and len(after.channel.members) == 1:  # if the user is not the bot and someone connects to the channel it plays a sound
-            time.sleep(1)
-            voiceclient = await after.channel.connect()  # wait x amount of seconds so it randomize joins
-            speakrandom(voiceclient)
+        if after.channel is not None and before.channel is None:
+            if len(after.channel.members) == 1:  # if the user is not the bot and someone connects to the channel it plays a sound
+                time.sleep(1)
+                voiceclient = await after.channel.connect()  # wait x amount of seconds so it randomize joins
+                speakrandom(voiceclient)
+
+
 
         if after.channel is not None:
             print(after.channel)
 
         if before.channel is not None:
+            print(before.channel.members)
             if len(before.channel.members) == 1:
                 for voice_state in client.voice_clients:
                     if voice_state.channel.id == before.channel.id:
