@@ -4,7 +4,7 @@ import time
 import discord
 from dotenv import load_dotenv
 import random
-
+import threading
 load_dotenv()
 
 client = discord.Client()
@@ -51,7 +51,7 @@ async def on_voice_state_update(member, before, after):
                     permissions = after.channel.permissions_for(
                         client.get_guild(after.channel.guild.id).get_member(client.user.id))
                     if permissions.speak and permissions.connect:
-                        voiceClient = await after.channel.connect()
+                        voice.move_to(after.channel)
                         speakrandom(voiceClient)
                     else:
                         print(f"cant connect to {after.channel}")
@@ -62,19 +62,44 @@ async def on_voice_state_update(member, before, after):
                     client.get_guild(after.channel.guild.id).get_member(client.user.id))
                 if permissions.speak and permissions.connect:
                     voiceClient = await after.channel.connect()
+                    #voiceSpeakThread = threading.Thread(target=randomvoiceSpeak)
+                    print(threading.enumerate())
                     speakrandom(voiceClient)
                 else:
                     print(f"cant connect to {after.channel}")
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
-            if len(before.channel.members) == 1:
-                for voice_state in client.voice_clients:
-                    if voice_state.channel.id == before.channel.id:
-                        await voice_state.disconnect()
-                        break
+            voice_state = None
+            for voice_state in client.voice_clients:
+                if voice_state.channel.id == before.channel.id:
+                    voice_state = voice_state
+                    break
+            if voice_state!= None:
+                if len(voice_state.channel.members) ==1:
+                    await voice_state.disconnect()
+                    voiceChannels = voice_state.guild.voice_channels
+                    for voicechannel in voiceChannels: #checks every voice channel
+                        if len(voicechannel.members) >0: #if there is someone inside
+                            permissions = voicechannel.permissions_for(
+                                client.get_guild(voicechannel.guild.id).get_member(client.user.id)) #get the permission for the specific voice channel
+                            if permissions.speak and permissions.connect: #if he can speak and connect he connects else he doesnt move
+                                await voicechannel.connect()
+                                break
 
-        if before.channel is not None and after.channel is not None:
-            print(before)
+
+                    
+            
+
+        if before.channel is not None and after.channel is not None: #if someone is switching
+            permissions = after.channel.permissions_for(
+                                client.get_guild(after.channel.guild.id).get_member(client.user.id))
+            if (len(after.channel.members) >= len(before.channel.members)) and permissions.speak and permissions.connect:
+                for voice_state in client.voice_clients:
+                    if voice_state.channel.guild.id == before.channel.guild.id:
+                       await voice_state.move_to(after.channel)
+                       break
+
+
 
 def speakrandom(voiceclient):
     time.sleep(2)  # wait 2 seconds so everybody is confest
