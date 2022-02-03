@@ -23,7 +23,6 @@ audio_dir = {
     9: 'wild'
 }
 
-
 @client.event
 async def on_ready():
     print(f'{client.user} has connected')
@@ -33,7 +32,6 @@ async def on_ready():
 async def on_voice_state_update(member, before, after):
     if member != client.user:  # to ignore actions by the bot
         if after.channel is not None and before.channel is None:  # if someone is joining
-
             isInGuildConencted = False
             voice = None
 
@@ -43,16 +41,12 @@ async def on_voice_state_update(member, before, after):
                     isInGuildConencted = True
 
             if isInGuildConencted:  # if it is already connected
-                if voice.channel.id == after.channel.id:  # if he connects to one where one is already in it
-                    time.sleep(5)
-                    speakrandom(voice)
-                else:
+                if voice.channel.id != after.channel.id:  # if he connects to one where one is already in it
                     time.sleep(1)
                     permissions = after.channel.permissions_for(
                         client.get_guild(after.channel.guild.id).get_member(client.user.id))
                     if permissions.speak and permissions.connect:
                         voice.move_to(after.channel)
-                        speakrandom(voiceClient)
                     else:
                         print(f"cant connect to {after.channel}")
 
@@ -62,11 +56,11 @@ async def on_voice_state_update(member, before, after):
                     client.get_guild(after.channel.guild.id).get_member(client.user.id))
                 if permissions.speak and permissions.connect:
                     voiceClient = await after.channel.connect()
-                    voiceSpeakThread = threading.Thread(target=randomvoiceSpeak)
-                    voiceSpeakThread.start()
-                    print(voiceSpeakThread.ident)
+                    if not any(threads.name=="RandomSpeak" for threads in threading.enumerate()):
+                        voiceSpeakThread = threading.Thread(target=randomvoiceSpeak)
+                        voiceSpeakThread.start()
+                        voiceSpeakThread.name = "RandomSpeak"
                     print(threading.enumerate())
-                    speakrandom(voiceClient)
                 else:
                     print(f"cant connect to {after.channel}")
 
