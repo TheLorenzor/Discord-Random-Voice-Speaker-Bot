@@ -62,7 +62,9 @@ async def on_voice_state_update(member, before, after):
                     client.get_guild(after.channel.guild.id).get_member(client.user.id))
                 if permissions.speak and permissions.connect:
                     voiceClient = await after.channel.connect()
-                    #voiceSpeakThread = threading.Thread(target=randomvoiceSpeak)
+                    voiceSpeakThread = threading.Thread(target=randomvoiceSpeak)
+                    voiceSpeakThread.start()
+                    print(voiceSpeakThread.ident)
                     print(threading.enumerate())
                     speakrandom(voiceClient)
                 else:
@@ -70,16 +72,19 @@ async def on_voice_state_update(member, before, after):
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
             voice_state = None
+
             for voice_state in client.voice_clients:
                 if voice_state.channel.id == before.channel.id:
                     voice_state = voice_state
                     break
+
             if voice_state!= None:
+                print(voice_state)
                 if len(voice_state.channel.members) ==1:
                     await voice_state.disconnect()
                     voiceChannels = voice_state.guild.voice_channels
                     for voicechannel in voiceChannels: #checks every voice channel
-                        if len(voicechannel.members) >0: #if there is someone inside
+                        if len(voicechannel.members) >0 and any(member.name != client.user.name for member in voicechannel.members) : #if there is someone inside
                             permissions = voicechannel.permissions_for(
                                 client.get_guild(voicechannel.guild.id).get_member(client.user.id)) #get the permission for the specific voice channel
                             if permissions.speak and permissions.connect: #if he can speak and connect he connects else he doesnt move
@@ -113,9 +118,9 @@ def randomvoiceSpeak():
         if len(client.voice_clients) == 0:
             break
         else:
-            time.sleep(random.randint(0, 60))  # maximal eine stunde wo nichts passiert
             for voice_client in client.voice_clients:
                 speakrandom(voice_client)
+            time.sleep(random.randint(0, 60))  # maximal eine stunde wo nichts passiert
 
 
 client.run(os.getenv("DISCORD_TOKEN"))
