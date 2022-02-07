@@ -112,7 +112,7 @@ def speakrandom(voiceclient):
     audio = audio_dir.get(random.randint(0, 9))  # get one of the audios (spezified in the audio dictionary)
     try:
         if voiceclient.is_connected():
-            voiceclient.play(discord.FFmpegPCMAudio(dir_path + f'\\audio\\{audio}.mp3'))  # play sound
+            voiceclient.play(discord.FFmpegPCMAudio(dir_path + f'/audio/{audio}.mp3'))  # play sound
             log.log(0,f"playing {audio} /Guild -> {voiceclient.guild} /Channel -> {voiceclient.channel}")
     except:
         log.log(2,"Error with playing the audio")
