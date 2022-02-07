@@ -9,5 +9,5 @@ class Type(Enum):
 
 def log(type,message):
     file = open("./log/events.log","a")
-    file.write(f"{Type(type).name} --- [{datetime.now(tz=None)}]: {message}")
+    file.write(f"{Type(type).name} --- [{datetime.now(tz=None)}]: {message} \n")
     file.close
