@@ -37,6 +37,7 @@ async def on_voice_state_update(member, before, after):
                     if voiceClient.channel.guild.id == after.channel.guild.id:
                         voice = voiceClient
                         isInGuildConencted = True
+                        break
 
                 if isInGuildConencted:  # if it is already connected
                     if voice.channel.id != after.channel.id:  # if he connects to one where he is not in it
@@ -66,7 +67,7 @@ async def on_voice_state_update(member, before, after):
                     else:
                         log.log(1,"Can't Connect to: "+after.channel+" -> "+after.channel.guild)
             except Exception as e:
-                log.log(2, str(e))
+                log.log(2, e.with_traceback)
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
             try:
