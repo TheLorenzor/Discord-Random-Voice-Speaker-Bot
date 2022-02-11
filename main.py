@@ -64,7 +64,7 @@ async def on_voice_state_update(member, before, after):
                             voiceSpeakThread.start()
                             voiceSpeakThread.name = "RandomSpeak"
                     else:
-                        log.log(1,"Can't Connect to: "+after.channel+" -> "+after.channel.guild)
+                        log.log(1,f"Can't Connect to: {after.channel} -> {after.channel.guild}")
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
             try:
@@ -88,6 +88,9 @@ async def on_voice_state_update(member, before, after):
                                 await voicechannel.connect()
                                 log.log(0, f"Conencted to: {voice_state.channel} / Guild --> {voice_state.guild}")
                                 break
+                            else:
+                                log.log(1,f"Can't move to: {after.channel} -> {after.channel.guild}")
+
             except Exception as e:
                 log.log(2, str(e))
 
