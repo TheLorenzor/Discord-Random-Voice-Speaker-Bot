@@ -29,6 +29,7 @@ async def on_ready():
 async def on_voice_state_update(member, before, after):
     if member != client.user:  # to ignore actions by the bot
         if after.channel is not None and before.channel is None:  # if someone is joining
+            try:
                 isInGuildConencted = False
                 voice = None
 
@@ -65,6 +66,9 @@ async def on_voice_state_update(member, before, after):
                             voiceSpeakThread.name = "RandomSpeak"
                     else:
                         log.log(1,f"Can't Connect to: {after.channel} -> {after.channel.guild}")
+            except Exception as e:
+                log.log(2,str(e))
+
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
             try:
