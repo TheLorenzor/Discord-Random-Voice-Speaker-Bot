@@ -67,7 +67,7 @@ async def on_voice_state_update(member, before, after):
                     else:
                         log.log(1,f"Can't Connect to: {after.channel} -> {after.channel.guild}")
             except Exception as e:
-                log.log(2,str(e))
+                log.log(2,str(e+" - on someone joining "))
 
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
@@ -96,7 +96,7 @@ async def on_voice_state_update(member, before, after):
                                 log.log(1,f"Can't move to: {after.channel} -> {after.channel.guild}")
 
             except Exception as e:
-                log.log(2, str(e))
+                log.log(2, str(e+" on someone leaving"))
 
         if before.channel is not None and after.channel is not None: #if someone is switching
             try:
@@ -110,7 +110,7 @@ async def on_voice_state_update(member, before, after):
                             log.log(0,f"Moving from Channel: {before.channel} -> {after.channel} | Guild -> {voice_state.guild}")
                             break
             except Exception as e:
-                log.log(2, str(e))
+                log.log(2, str(e + " on someone switching"))
 
 def speakrandom(voiceclient):
     time.sleep(2)  # wait 2 seconds so everybody is confest
@@ -132,5 +132,5 @@ def randomvoiceSpeak():
                 speakrandom(voice_client)
             time.sleep(random.randint(0, int(os.getenv("MAX_TIME"))))  # maximal eine stunde wo nichts passiert
     except Exception as e:
-        log.log(2,str(e))
+        log.log(2,str(e +" on speaking"))
 client.run(os.getenv("DISCORD_TOKEN"))
