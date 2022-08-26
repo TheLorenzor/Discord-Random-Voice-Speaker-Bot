@@ -45,6 +45,7 @@ async def on_voice_state_update(member, before, after):
                     if voiceClient.channel.guild.id == after.channel.guild.id:
                         voice = voiceClient
                         isInGuildConencted = True
+                        break
 
                 if isInGuildConencted:  # if it is already connected
                     if voice.channel.id != after.channel.id:  # if he connects to one where he is not in it
@@ -72,9 +73,10 @@ async def on_voice_state_update(member, before, after):
                             voiceSpeakThread.start()
                             voiceSpeakThread.name = "RandomSpeak"
                     else:
-                        log.log(1,"Can't Connect to: "+after.channel+" -> "+after.channel.guild)
+                        log.log(1,f"Can't Connect to: {after.channel} -> {after.channel.guild}")
             except Exception as e:
-                log.log(2, str(e))
+                log.log(2,str(e+" - on someone joining "))
+
 
         if before.channel is not None and after.channel is None:  # if someone is leaving
             try:
@@ -98,8 +100,11 @@ async def on_voice_state_update(member, before, after):
                                 await voicechannel.connect()
                                 log.log(0, f"Conencted to: {voice_state.channel} / Guild --> {voice_state.guild}")
                                 break
+                            else:
+                                log.log(1,f"Can't move to: {after.channel} -> {after.channel.guild}")
+
             except Exception as e:
-                log.log(2, str(e))
+                log.log(2, str(e+" on someone leaving"))
 
         if before.channel is not None and after.channel is not None: #if someone is switching
             try:
@@ -113,7 +118,7 @@ async def on_voice_state_update(member, before, after):
                             log.log(0,f"Moving from Channel: {before.channel} -> {after.channel} | Guild -> {voice_state.guild}")
                             break
             except Exception as e:
-                log.log(2, str(e))
+                log.log(2, str(e + " on someone switching"))
 
 def speakrandom(voiceclient):
     time.sleep(2)  # wait 2 seconds so everybody is confest
@@ -135,5 +140,5 @@ def randomvoiceSpeak():
                 speakrandom(voice_client)
             time.sleep(random.randint(0, int(os.getenv("MAX_TIME"))))  # maximal eine stunde wo nichts passiert
     except Exception as e:
-        log.log(2,str(e))
+        log.log(2,str(e +" on speaking"))
 client.run(os.getenv("DISCORD_TOKEN"))
