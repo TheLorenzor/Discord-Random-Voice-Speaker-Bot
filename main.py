@@ -19,7 +19,15 @@ audio_dir = {
     6: 'same',
     7: 'sheesh',
     8: 'sus',
-    9: 'wild'
+    9: 'wild',
+    10: 'bodenlos',
+    11: 'bre',
+    12: 'gommemode',
+    13: 'macher',
+    14: 'siu',
+    15: 'slay',
+    16: 'smash',
+    17: 'wyld'
 }
 @client.event
 async def on_ready():
@@ -109,7 +117,7 @@ async def on_voice_state_update(member, before, after):
 
 def speakrandom(voiceclient):
     time.sleep(2)  # wait 2 seconds so everybody is confest
-    audio = audio_dir.get(random.randint(0, 9))  # get one of the audios (spezified in the audio dictionary)
+    audio = audio_dir.get(random.randint(0, 17))  # get one of the audios (spezified in the audio dictionary)
     try:
         if voiceclient.is_connected():
             voiceclient.play(discord.FFmpegPCMAudio(dir_path + f'/audio/{audio}.mp3'))  # play sound
