@@ -7,7 +7,7 @@ import threading
 import log
 
 load_dotenv()
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 dir_path = os.getcwd()
 audio_dir = {
     0: 'akkurat',
