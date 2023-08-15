@@ -14,7 +14,9 @@ audio_files_path =const.DATA_PATH / 'audio'
 audio_files = list(audio_files_path.glob('*.mp3'))
 @client.event
 async def on_ready():
-    pass
+    guilds = client.guilds
+    for guild in client.guilds:
+        print(guild.text_channels)
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -55,25 +57,26 @@ async def on_voice_state_update(member, before, after):
                 if voice_state.channel.id == before.channel.id:
                     voice_state = voice_state
                     break
-
-            if voice_state != None and len(
-                    voice_state.channel.members) == 1:  # if the voice state is part of the guild and if the mbot is the last one left
+            # if the voice state is part of the guild and if the mbot is the last one left
+            if voice_state != None and len(voice_state.channel.members) == 1:
                 await voice_state.disconnect()
                 voiceChannels = voice_state.guild.voice_channels
                 for voicechannel in voiceChannels:  # checks every voice channel
+                    # if there is someone inside
                     if len(voicechannel.members) > 0 and any(member.name != client.user.name for member in
-                                                             voicechannel.members):  # if there is someone inside
-                        permissions = voicechannel.permissions_for(
-                            client.get_guild(voicechannel.guild.id).get_member(
-                                client.user.id))  # get the permission for the specific voice channel
-                        if permissions.speak and permissions.connect:  # if he can speak and connect he connects else he doesnt move
+                                                             voicechannel.members):
+                        # get the permission for the specific voice channel
+                        permissions = voicechannel.permissions_for(client.get_guild(voicechannel.guild.id).get_member(
+                                client.user.id))
+                        # if he can speak and connect he connects else he doesnt move
+                        if permissions.speak and permissions.connect:
                             await voicechannel.connect()
 
         if before.channel is not None and after.channel is not None:  # if someone is switching
             permissions = after.channel.permissions_for(
                 client.get_guild(after.channel.guild.id).get_member(client.user.id))
-            if (len(after.channel.members) >= len(
-                    before.channel.members)) and permissions.speak and permissions.connect:  # if the channel memvvers where the person is now has more members than the current one
+            # if the channel memvvers where the person is now has more members than the current one
+            if (len(after.channel.members) >= len(before.channel.members)) and permissions.speak and permissions.connect:
                 # he switches to annoy the most people possible -> then moves to the location
                 for voice_state in client.voice_clients:
                     if voice_state.channel.guild.id == before.channel.guild.id:
