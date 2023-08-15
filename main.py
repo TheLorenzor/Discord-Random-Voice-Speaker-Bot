@@ -1,7 +1,6 @@
 import os
 import time
 import discord
-from dotenv import load_dotenv
 import random
 import threading
 import log
@@ -29,7 +28,6 @@ audio_dir = {
     16: 'smash',
     17: 'wyld'
 }
-
 
 @client.event
 async def on_ready():

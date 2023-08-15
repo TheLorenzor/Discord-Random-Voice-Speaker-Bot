@@ -1,2 +1,4 @@
-.env
+*.env
+config.conf
 /__pycache__/
+/.idea
