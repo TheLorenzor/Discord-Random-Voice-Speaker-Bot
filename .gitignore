@@ -1,4 +1,4 @@
 *.env
-config.conf
+data/config.ini
 /__pycache__/
 /.idea
