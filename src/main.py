@@ -10,11 +10,11 @@ import constants as const
 client = discord.Client(intents=discord.Intents.default())
 dir_path = os.getcwd()
 
+
 audio_files_path =const.DATA_PATH / 'audio'
 audio_files = list(audio_files_path.glob('*.mp3'))
 @client.event
 async def on_ready():
-    guilds = client.guilds
     for guild in client.guilds:
         for channel in guild.text_channels:
             user_member = guild.get_member(client.user.id)
