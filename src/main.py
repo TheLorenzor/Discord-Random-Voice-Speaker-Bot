@@ -2,14 +2,14 @@ import os
 import time
 import random
 import threading
-
+import logging
 import discord
 
 import constants as const
 
 client = discord.Client(intents=discord.Intents.default())
 dir_path = os.getcwd()
-
+logging.basicConfig(level=logging.INFO)
 
 audio_files_path =const.DATA_PATH / 'audio'
 audio_files = list(audio_files_path.glob('*.mp3'))
@@ -105,6 +105,7 @@ async def on_guild_join(guild):
             break
 
 def randomvoiceSpeak():
+    logging.info("starting with the speaker")
     while (True):
         if len(client.voice_clients) == 0:  # if there no voice clients anymore
             break
