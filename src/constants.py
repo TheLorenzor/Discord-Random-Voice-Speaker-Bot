@@ -8,4 +8,9 @@ config = parser.ConfigParser()
 config.read(str(DATA_PATH / 'config.ini'))
 
 DISCORD_TOKEN = config['Configuration']['token']
+
 TIMEOUT_TIME = int(config['Configuration']['time_out'])
+
+JOIN_MESSAGE = config['Configuration']['hello_message']
+
+UPDATE_MESSAGE = str(config['Configuration']['update_message'])

@@ -16,7 +16,13 @@ audio_files = list(audio_files_path.glob('*.mp3'))
 async def on_ready():
     guilds = client.guilds
     for guild in client.guilds:
-        print(guild.text_channels)
+        for channel in guild.text_channels:
+            user_member = guild.get_member(client.user.id)
+            permission =channel.permissions_for(user_member)
+            if permission.view_channel and permission.send_messages:
+                await channel.send(const.UPDATE_MESSAGE)
+                break
+
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -89,6 +95,14 @@ def speakrandom(voiceclient):
     if voiceclient.is_connected():
         voiceclient.play(discord.FFmpegPCMAudio(str(const.DATA_PATH /'audio'/ audio)))  # play sound
 
+@client.event
+async def on_guild_join(guild):
+    for channel in guild.text_channels:
+        user_member = guild.get_member(client.user.id)
+        permission = channel.permissions_for(user_member)
+        if permission.view_channel and permission.send_messages:
+            await channel.send(const.JOIN_MESSAGE)
+            break
 
 def randomvoiceSpeak():
     while (True):
