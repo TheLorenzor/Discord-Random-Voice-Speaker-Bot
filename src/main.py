@@ -15,14 +15,15 @@ audio_files_path =const.DATA_PATH / 'audio'
 audio_files = list(audio_files_path.glob('*.mp3'))
 @client.event
 async def on_ready():
-    print(f"{client.user} is Ready")
-    for guild in client.guilds:
-        for channel in guild.text_channels:
-            user_member = guild.get_member(client.user.id)
-            permission =channel.permissions_for(user_member)
-            if permission.view_channel and permission.send_messages:
-                await channel.send(const.UPDATE_MESSAGE)
-                break
+    print(f"{client.user} is Ready") 
+    if const.IS_UPDATE: # check whether at all it should be send
+        for guild in client.guilds:
+            for channel in guild.text_channels: 
+                user_member = guild.get_member(client.user.id)
+                permission =channel.permissions_for(user_member)
+                if permission.view_channel and permission.send_messages:                
+                    await channel.send(const.UPDATE_MESSAGE)
+                    break
 
 
 @client.event

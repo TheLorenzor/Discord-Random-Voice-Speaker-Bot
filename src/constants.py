@@ -14,3 +14,5 @@ TIMEOUT_TIME = int(config['Configuration']['time_out'])
 JOIN_MESSAGE = config['Configuration']['hello_message']
 
 UPDATE_MESSAGE = str(config['Configuration']['update_message'])
+
+IS_UPDATE = config['Configuration'].getboolean('is_update')
